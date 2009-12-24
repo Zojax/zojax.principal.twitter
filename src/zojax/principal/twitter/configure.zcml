@@ -1,0 +1,78 @@
+<configure
+ xmlns="http://namespaces.zope.org/zope"
+ xmlns:zojax="http://namespaces.zope.org/zojax"
+ i18n_domain="zojax.authentication.twitter">
+  
+  <zojax:product
+   name="zojax-authentication-twitter"
+   title="Twitter Authentication"
+   description="Twitter authentication module based on OAuth."
+   schema=".product.ITwitterAuthenticationProduct"
+   class=".product.TwitterAuthenticationProduct"
+   configurable="true"/>
+  
+  <registerIn
+   registry="zojax.product.zojax-authentication-twitter">
+    
+    <class
+     class=".plugin.CredentialsPlugin">
+      <require
+       permission="zope.ManageServices"
+       interface="zojax.content.type.interfaces.IItem"
+       set_schema="zojax.content.type.interfaces.IItem"/>
+    </class>
+    
+    <zojax:content
+     title="Twitter Member"
+     name="twitter.principal.user"
+     schema=".interfaces.ITwitterPrincipal"
+     class=".plugin.TwitterPrincipal"
+     containers="twitter.principal.users"
+     permission="zojax.principal.ManageUser"/>
+
+    <class class=".plugin.TwitterPrincipal">
+      <implements interface="zojax.principal.field.interfaces.IUser"/>
+      <implements interface="zojax.content.type.interfaces.ISearchableContent"/>
+      <require
+       permission="zope.View"
+       interface="zojax.principal.field.interfaces.IUser"/>
+      <require
+       permission="zojax.ModifyContent"
+       interface=".interfaces.ITwitterPrincipal"
+       set_schema=".interfaces.ITwitterPrincipal"/>
+    </class>
+    
+    <zojax:content
+     title="Twitter Users"
+     name="twitter.principal.users"
+     class=".plugin.AuthenticatorPlugin"
+     schema="zojax.principal.users.interfaces.IUsersPlugin"
+     contains="twitter.principal.user"
+     type="zojax.content.type.interfaces.IExplicitlyAddable"
+     permission="zope.ManageServices"/>
+    
+    <class class=".plugin.AuthenticatorPlugin">
+      <implements
+       interface="zope.app.container.interfaces.IContainerNamesContainer"/>
+      <allow attributes="prefix"/>
+      <require
+       permission="zope.ManageServices"
+       interface="zojax.content.type.interfaces.IItem
+       zope.app.container.interfaces.IContainer "
+       set_schema="zojax.content.type.interfaces.IItem"/>
+    </class>
+    
+    <utility
+     name="credentials.twitter"
+     component=".plugin.credentialsFactory"/>
+    
+    <utility
+     name="principal.twitter"
+     component=".plugin.authenticatorFactory"/>
+    
+    <include package=".browser"/>
+    
+  </registerIn>
+  
+  
+</configure>
