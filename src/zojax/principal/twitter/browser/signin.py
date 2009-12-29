@@ -2,11 +2,11 @@ from httplib import BadStatusLine
 from urllib2 import URLError
 
 from zope import component
-from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.publisher.browser import BrowserPage
 from zope.session.interfaces import ISession
+from zope.traversing.browser import absoluteURL
 
 from zojax.principal.twitter import oauthtwitter
 from zojax.principal.twitter.interfaces import _
@@ -42,4 +42,4 @@ class TwitterSignIn(BrowserPage):
         return u''
 
     def _redirectToRoot(self):
-        self.request.response.redirect(zapi.absoluteURL(getSite(), self.request))
+        self.request.response.redirect(absoluteURL(getSite(), self.request))
