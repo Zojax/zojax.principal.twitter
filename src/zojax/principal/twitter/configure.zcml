@@ -74,5 +74,7 @@
     
   </registerIn>
   
+  <include package=".browser" file="styles.zcml" />
+  
   
 </configure>

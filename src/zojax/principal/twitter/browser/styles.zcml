@@ -15,7 +15,5 @@
      title="Twitter Sign In"
      template="portlet.pt"
      class=".portlet.TwitterSignIn" />
-
- 
   
 </configure>
