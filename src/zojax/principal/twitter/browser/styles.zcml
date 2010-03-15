@@ -4,16 +4,9 @@
  xmlns:zojax="http://namespaces.zope.org/zojax"
  i18n_domain="zojax.authentication.twitter">
   
-  <browser:page
-   name="twitterSignIn"
-   for="zope.app.component.interfaces.ISite"
-   permission="zope.Public"
-   class=".signin.TwitterSignIn"/>
-   
-  <zojax:portlet
-     name="portlet.twitter-sign-in"
-     title="Twitter Sign In"
-     template="portlet.pt"
-     class=".portlet.TwitterSignIn" />
-  
+  <zojax:resourcedirectory
+     name="zojax-authentication-twitter-images"
+     directory="images"
+   />
+     
 </configure>

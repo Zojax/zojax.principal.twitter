@@ -16,6 +16,10 @@
      template="portlet.pt"
      class=".portlet.TwitterSignIn" />
 
- 
+   <adapter
+     for="..plugin.CredentialsPlugin *"
+     provides="zojax.authentication.interfaces.ILoginAction"
+     factory=".login.LoginAction"
+     />
   
 </configure>
