@@ -276,6 +276,6 @@ credentialsFactory = CredentialsPluginFactory(
     u'')
 
 authenticatorFactory = AuthenticatorPluginFactory(
-    "principal.twitter", AuthenticatorPlugin, ((IUsersPlugin, ''),),
+    "principal.twitter", AuthenticatorPlugin, ((ITwitterAuthenticator, ''),),
     _(u'Twitter users'),
     u'')
