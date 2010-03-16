@@ -4,7 +4,7 @@
       <a tal:attributes="href string:$siteURL/@@twitterSignIn"
          title="Sign in with Twitter"
          i18n:attributes="title">
-        <img tal:attributes="src string:$siteURL/@@/zojax-authentication-twitter-images/sign-in-with-twitter.png"
+        <img tal:attributes="src string:$siteURL/@@/zojax-authentication-twitter-images/twitter.png"
              alt="Sign in with Twitter"
              i18n:attributes="alt" />             
       </a>
