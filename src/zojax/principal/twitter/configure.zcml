@@ -35,10 +35,9 @@
       <implements interface="zojax.content.type.interfaces.ISearchableContent"/>
       <require
        permission="zope.View"
-       interface="zojax.principal.field.interfaces.IUser"/>
+       interface=".interfaces.ITwitterPrincipal"/>
       <require
        permission="zojax.ModifyContent"
-       interface=".interfaces.ITwitterPrincipal"
        set_schema=".interfaces.ITwitterPrincipal"/>
     </class>
     
@@ -46,7 +45,7 @@
      title="Twitter Users"
      name="twitter.principal.users"
      class=".plugin.AuthenticatorPlugin"
-     schema="zojax.principal.users.interfaces.IUsersPlugin"
+     schema=".interfaces.ITwitterAuthenticator"
      contains="twitter.principal.user"
      type="zojax.content.type.interfaces.IExplicitlyAddable"
      permission="zope.ManageServices"/>
@@ -62,6 +61,16 @@
        set_schema="zojax.content.type.interfaces.IItem"/>
     </class>
     
+    <subscriber handler=".foundsubscriber.foundPrincipalCreated" />
+     
+     <subscriber handler=".foundsubscriber.principalLoggingOut" />
+   
+     <subscriber
+        for="zope.app.authentication.interfaces.IAuthenticatedPrincipalCreated"
+        handler=".foundsubscriber.foundPrincipalCreated" />
+   
+     <adapter factory=".foundsubscriber.getInternalPrincipal" />
+    
     <utility
      name="credentials.twitter"
      component=".plugin.credentialsFactory"/>
@@ -75,6 +84,8 @@
   </registerIn>
   
   <include package=".browser" file="styles.zcml" />
+  
+  <include package=".browser" file="preference.zcml" />
   
   
 </configure>

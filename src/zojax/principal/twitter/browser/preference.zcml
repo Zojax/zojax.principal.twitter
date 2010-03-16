@@ -1,0 +1,25 @@
+<configure
+ xmlns="http://namespaces.zope.org/zope"
+ xmlns:browser="http://namespaces.zope.org/browser"
+ xmlns:zojax="http://namespaces.zope.org/zojax"
+ i18n_domain="zojax.authentication.twitter">
+  
+  <!-- remove principal -->
+  <zojax:preferenceGroup
+     id="membership.removetwitter"
+     title="Remove user"
+     for="..interfaces.ITwitterPrincipalMarker"
+     description="Remove user from portal."
+     schema=".remove.IPrincipalRemoverPreference"
+     tests=".remove.isNotSelf"
+     permission="zojax.principal.RemoveUser" />-->
+
+  <zojax:pagelet
+     name="index.html"
+     for=".remove.IPrincipalRemoverPreference"
+     class=".remove.RemovePrincipalView"
+     template="remove.pt"
+     provides="zojax.preferences.browser.interfaces.IEdit"
+     permission="zojax.principal.RemoveUser" />
+  
+</configure>

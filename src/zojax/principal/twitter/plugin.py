@@ -18,21 +18,19 @@ from zojax.authentication.factory import CredentialsPluginFactory, \
 from zojax.authentication.interfaces import ICredentialsPlugin, \
     PrincipalRemovingEvent, IPrincipalInfoStorage
 from zojax.authentication.nocachingstorage import NoCachingStorage
-from zojax.principal.twitter import oauthtwitter
-from zojax.principal.twitter.interfaces import ITwitterPrincipal, _, \
-    ITwitterCredentials, ITwitterAuthenticator
 from zojax.cache.interfaces import ICacheConfiglet
 from zojax.content.type.container import ContentContainer
 from zojax.content.type.item import PersistentItem
 from zojax.controlpanel.interfaces import IConfiglet
-from zojax.principal.users.interfaces import IUsersPlugin
-from zojax.principal.users.plugin import PrincipalInfo
+
+import oauthtwitter
+from interfaces import ITwitterPrincipal, _, \
+    ITwitterCredentials, ITwitterAuthenticator, ITwitterPrincipalInfo
 
 
 SESSION_KEY = 'zojax.authentication.twitter'
 REQUEST_TOKEN_KEY = '_twitter_request_token'
 ACCESS_TOKEN_KEY = '_twitter_access_token'
-
 
 _marker = object()
 
@@ -45,14 +43,25 @@ def getRequest():
             return participation
 
 
+class TwitterPrincipalInfo(object):
+    interface.implements(ITwitterPrincipalInfo)
+
+    description = u''
+
+    def __init__(self, id, internal):
+        self.id = id
+        self.twitterId = internal.twitterId
+        self.title = internal.title
+        self.internalId = internal.__name__
+
+    def __repr__(self):
+        return 'TwitterPrincipalInfo(%r)' % self.id
+
+
 class TwitterPrincipal(PersistentItem):
     interface.implements(ITwitterPrincipal)
 
-    firstname = FieldProperty(ITwitterPrincipal['firstname'])
-    lastname = FieldProperty(ITwitterPrincipal['lastname'])
     login = FieldProperty(ITwitterPrincipal['login'])
-    password = FieldProperty(ITwitterPrincipal['password'])
-    description = FieldProperty(ITwitterPrincipal['description'])
     twitterId = FieldProperty(ITwitterPrincipal['twitterId'])
 
     @rwproperty.getproperty
@@ -73,10 +82,7 @@ class TwitterPrincipal(PersistentItem):
             component.getUtility(IAuthentication, context=self).prefix,
             self.__parent__.prefix, self.__name__)
         return self.id
-
-    def getLogin(self):
-        return self.login
-
+    
 
 class TwitterCredentials(object):
     interface.implements(ITwitterCredentials)
@@ -108,7 +114,7 @@ class CredentialsPlugin(PersistentItem):
 
 
 class AuthenticatorPlugin(ContentContainer):
-    interface.implements(IUsersPlugin, IAuthenticatorPlugin, ITwitterAuthenticator, INameChooser)
+    interface.implements(IAuthenticatorPlugin, ITwitterAuthenticator, INameChooser)
 
     def __init__(self, title=_('Twitter users'), description=u'', prefix=u'zojax.twitter.'):
         self.prefix = unicode(prefix)
@@ -205,7 +211,7 @@ class AuthenticatorPlugin(ContentContainer):
         if id.startswith(self.prefix):
             internal = self.get(id[len(self.prefix):])
             if internal is not None:
-                return PrincipalInfo(id, internal)
+                return TwitterPrincipalInfo(id, internal)
 
     def getPrincipalByLogin(self, login):
         """ return principal info by login """

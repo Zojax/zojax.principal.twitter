@@ -1,6 +1,6 @@
 from zope import interface, schema
 from zope.i18nmessageid.message import MessageFactory
-from zojax.principal.users.interfaces import IPrincipal
+from zope.app.authentication.interfaces import IPrincipalInfo
 
 
 _ = MessageFactory("zojax.authentication.twitter")
@@ -18,7 +18,7 @@ class ITwitterAuthenticationProduct(interface.Interface):
                                   required=True,)
 
 
-class ITwitterPrincipal(IPrincipal):
+class ITwitterPrincipal(interface.Interface):
     """ twitter principal """
 
     login = schema.TextLine(
@@ -26,7 +26,19 @@ class ITwitterPrincipal(IPrincipal):
         description=_("Twitter username of the principal."))
 
     twitterId = schema.Int(title=_(u"Twitter ID"))
+    
 
+class ITwitterPrincipalMarker(interface.Interface):
+    """ twitter principal marker """
+    
+
+class ITwitterPrincipalInfo(IPrincipalInfo):
+    """ principal info """
+
+    internalId = interface.Attribute('Internal ID')
+
+    twitterId = interface.Attribute('Twitter ID')
+    
 
 class ITwitterCredentials(interface.Interface):
 
