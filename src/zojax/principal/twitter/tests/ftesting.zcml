@@ -4,7 +4,6 @@
    xmlns:zojax="http://namespaces.zope.org/zojax"
    i18n_domain="zojax.principal.twitter">
 
-  <exclude package="zope.app.securitypolicy.browser" />
   <include package="zojax.autoinclude" file="meta.zcml" />
   <includeAllDependencies package="zojax.principal.twitter" extras="test" />
 
